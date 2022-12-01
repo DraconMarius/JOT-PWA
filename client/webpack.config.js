@@ -18,12 +18,49 @@ module.exports = () => {
       path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
-      
+      //generate html
+      new HtmlWebpackPlugin({
+        template: './index.html',
+        title: 'JOT-JATE'
+      }),
+      //service worker
+      new InjectManifest({
+        swSrc: './src-sw.js',
+        swDest: 'src-sw.js',
+      }),
+      //options for manifest
+      new WebpackPwaManifest({
+        fingerprints: false,
+        inject: true,
+        name: 'JOT-JATE',
+        description: 'JOT PWA',
+        background_color: '#ffffff',
+        theme_color: '#FFC300',
+        start_url: './',
+        publicPath: './',
+        icons: {
+          src: path.resolve('src/images/logo.png'),
+          sizes: [96, 128, 192, 256, 384, 512],
+          destination: path.join('assets', 'icons'),
+        }
+      }),
     ],
 
     module: {
       rules: [
-        
+        //use css loader
+        {
+          test: /\.m?js$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+            option: {
+              presets: ['@babel/preset-env'],
+              plugins: ['@babel/plugin-proposal-object-rest-spread',
+                '@bebel/transform-runtime'],
+            },
+          },
+        },
       ],
     },
   };
