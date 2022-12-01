@@ -16,25 +16,31 @@ module.exports = () => {
     output: {
       filename: '[name].bundle.js',
       path: path.resolve(__dirname, 'dist'),
+      publicPath: './'
+    },
+    devServer: {
+      hot: 'only',
     },
     plugins: [
       //generate html
       new HtmlWebpackPlugin({
         template: './index.html',
-        title: 'JOT-JATE'
+        title: 'JATE'
       }),
       //service worker
       new InjectManifest({
         swSrc: './src-sw.js',
         swDest: 'src-sw.js',
       }),
+
       //options for manifest
       new WebpackPwaManifest({
         fingerprints: false,
         inject: true,
-        name: 'JOT-JATE',
-        description: 'JOT PWA',
-        background_color: '#ffffff',
+        name: 'JATE',
+        shortname: 'JPWA',
+        description: 'JOT JATE PWA',
+        background_color: '#FFC300',
         theme_color: '#FFC300',
         start_url: './',
         publicPath: './',
@@ -48,19 +54,28 @@ module.exports = () => {
 
     module: {
       rules: [
-        //use css loader
+        {
+          test: /\.css$/i,
+          use: ['style-loader', 'css-loader'],
+        },
+        //loading images
+        {
+          test: /\.(png|svg|jpg|jpeg|gif)$/i,
+          type: 'assets/resource',
+        },
+        //use babel loader to make backward compatibility
         {
           test: /\.m?js$/,
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
-            option: {
+            options: {
               presets: ['@babel/preset-env'],
-              plugins: ['@babel/plugin-proposal-object-rest-spread',
-                '@bebel/transform-runtime'],
+              plugins: ['@babel/plugin-proposal-object-rest-spread', '@bebel/transform-runtime'],
             },
           },
         },
+
       ],
     },
   };
