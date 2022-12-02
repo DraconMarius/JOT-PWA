@@ -20,6 +20,7 @@ module.exports = () => {
     devServer: {
       hot: 'only',
     },
+    devtool: 'eval-source-map',
     plugins: [
       //generate html
       new HtmlWebpackPlugin({
